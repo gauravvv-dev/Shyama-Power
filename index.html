@@ -87,6 +87,16 @@
     img {
       max-width: 100%;
       display: block;
+      height: auto;
+    }
+    
+    /* Ensure no images overflow on mobile */
+    @media (max-width: 768px) {
+      img {
+        max-width: 100% !important;
+        width: auto !important;
+        height: auto !important;
+      }
     }
 
     ::-webkit-scrollbar {
@@ -3052,7 +3062,7 @@
 
       <br>
 
-      <img src="Govt.jpeg" style="max-width:500px;border-radius:12px;margin:auto;">
+      <img src="Govt.jpeg" style="max-width:500px;width:100%;height:auto;border-radius:12px;margin:auto;display:block;">
 
     </div>
   </section>
