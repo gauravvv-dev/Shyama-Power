@@ -97,9 +97,26 @@
       }
     }
 
-    ::-webkit-scrollbar {
-      width: 5px;
+    .social-coming-soon {
+      opacity: 0.6;
+      cursor: pointer;
+      position: relative;
     }
+    .social-coming-soon:hover::after {
+      content: 'Coming Soon';
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--navy);
+      color: white;
+      font-size: 0.7rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    
 
     ::-webkit-scrollbar-track {
       background: #f1f5f9;
@@ -3278,12 +3295,13 @@
         <p class="footer-desc">Shyama Power is Uttar Pradesh's leading solar energy solutions provider. Premium rooftop
           solar installations backed by India's top brands and expert after-sales support.</p>
         <div class="footer-social">
-          <a href="#" class="social-btn" title="Facebook">f</a>
-          <a href="#" class="social-btn" title="Instagram">📷</a>
-          <a href="#" class="social-btn" title="YouTube">▶</a>
+          <a href="#" class="social-btn social-coming-soon" title="Facebook – Coming Soon" onclick="showSocialToast('Facebook'); return false;">f</a>
+          <a href="#" class="social-btn social-coming-soon" title="Instagram – Coming Soon" onclick="showSocialToast('Instagram'); return false;">📷</a>
+          <a href="#" class="social-btn social-coming-soon" title="YouTube – Coming Soon" onclick="showSocialToast('YouTube'); return false;">▶</a>
           <a href="https://wa.me/918400495959?text=Hi%2C%20I'm%20interested%20in%20solar%20installation."
-            class="social-btn" title="WhatsApp">💬</a>
+            class="social-btn" title="WhatsApp" target="_blank" rel="noopener">💬</a>
         </div>
+        <div id="socialToast" style="display:none;margin-top:10px;background:rgba(245,166,35,0.15);border:1px solid rgba(245,166,35,0.4);border-radius:8px;padding:8px 14px;font-size:0.8rem;color:var(--sun-deep);font-weight:600;"></div>
       </div>
       <div>
         <h4 class="footer-heading">Quick Links</h4>
@@ -3331,8 +3349,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2025 Shyama Power. All rights reserved. | Solar Panel Installation in Uttar Pradesh</p>
-      <p>Made with <span class="heart">♥</span> in India 🇮🇳</p>
+      <p>© 2026 Shyama Power. All rights reserved. | Solar Panel Installation in Uttar Pradesh</p>
+      <p>Designed & Developed by <a href="#" style="color:var(--sun);font-weight:700;">Gaurav</a> 🇮🇳</p>
     </div>
   </footer>
 
@@ -3410,7 +3428,10 @@
       const type = document.getElementById('ftype').value;
       const cap = document.getElementById('fcap').value;
       const msg = document.getElementById('fmsg').value.trim();
-      if (!name || !phone) { alert('Please fill in your name and phone number.'); return; }
+      if (!name) { showFormError('Please enter your full name.'); return; }
+      if (!phone || !/^[6-9]\d{9}$/.test(phone.replace(/[\s\-+]/g, '').replace(/^91/, ''))) {
+        showFormError('Please enter a valid 10-digit Indian mobile number.'); return;
+      }
       const text = encodeURIComponent(
         'Hi, I am ' + name + '. I am interested in solar installation.' +
         (type ? ' Type: ' + type + '.' : '') +
@@ -3419,6 +3440,33 @@
         ' Phone: ' + phone
       );
       window.open('https://wa.me/918400495959?text=' + text, '_blank');
+      // Show success message
+      const btn = document.querySelector('.submit-btn');
+      const original = btn.innerHTML;
+      btn.innerHTML = '✅ Opening WhatsApp...';
+      btn.style.background = '#22C55E';
+      setTimeout(() => { btn.innerHTML = original; btn.style.background = ''; }, 3000);
+    }
+
+    function showFormError(msg) {
+      let el = document.getElementById('formError');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'formError';
+        el.style.cssText = 'background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;padding:10px 14px;font-size:0.85rem;color:#DC2626;font-weight:600;margin-bottom:12px;';
+        document.querySelector('.submit-btn').insertAdjacentElement('beforebegin', el);
+      }
+      el.textContent = '⚠️ ' + msg;
+      el.style.display = 'block';
+      setTimeout(() => { el.style.display = 'none'; }, 4000);
+    }
+
+    // Social toast for coming-soon links
+    function showSocialToast(platform) {
+      const toast = document.getElementById('socialToast');
+      toast.textContent = platform + ' page coming soon! Follow us on WhatsApp for updates.';
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 3000);
     }
 
     // ⭐ SOLAR CALCULATOR FUNCTION
@@ -3473,4 +3521,3 @@ function goToSlide(n) {
 </body>
 
 </html>
-
